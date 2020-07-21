@@ -12,10 +12,20 @@ DeleteTextAndImaeFile():Unit           -> EditText 및 File 지우기
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //타이틀을 숨긴다.
+        setHideTitle()
         setContentView(R.layout.activity_main)
+    }
+
+    private fun setHideTitle(){
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        getSupportActionBar()!!.hide()
     }
 }
