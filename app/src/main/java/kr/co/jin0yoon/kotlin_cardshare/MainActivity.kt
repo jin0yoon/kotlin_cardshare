@@ -11,8 +11,10 @@ DeleteTextAndImaeFile():Unit           -> EditText 및 File 지우기
  */
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -44,10 +46,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+
+    //타이틀을 숨김
     private fun setHideTitle(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         getSupportActionBar()!!.hide()
     }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 
     //0. 마시멜로우 버전 이후부터는 정책상 반드시 해야 하는 과정
     private fun grantExternalStoragePermission():Boolean {
@@ -64,6 +71,8 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 
     //2. EditText의 화면을 File로 저장하는 메소드 구현
     fun SaveImage(): File {
@@ -111,4 +120,28 @@ class MainActivity : AppCompatActivity() {
         //파일을 넘겨준다.
         return file
     }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+
+    //3. 파일을 공유하는 메소드 구현
+    fun ShareImage(f:File){
+
+        //파일정보를 uri로 만든다.
+        val uri = Uri.fromFile(f)
+
+        //"image/*" type으로 지정하고 action은 Intent.ACTION_SEND인 Intent를 만든다.
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.type = "image/*"
+
+        //파일정보를 저장한다.
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+
+        //저장된 intent 정보로 Activity를 실행한다.
+        startActivity(Intent.createChooser(intent, "Share Cover Image"))
+    }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+
+    
 }
