@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.view.Window
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -44,6 +45,18 @@ class MainActivity : AppCompatActivity() {
             //저장된 파일을 공유한다.
             SaveImage().let{ShareImage(it)}
         }
+
+        //버튼을 가져오고, click 핸들러를 구현한다.
+        btnClear.setOnClickListener {
+            //EditText의 배경과 Text를 지운다.
+            DeleteTextAndImageFile()
+        }
+
+
+        //버튼을 가져오고, click 핸들러를 구현한다.
+        btnImage.setOnClickListener {
+            SelectBackground()
+        }
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -56,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-    //0. 마시멜로우 버전 이후부터는 정책상 반드시 해야 하는 과정
+    //1. 마시멜로우 버전 이후부터는 정책상 반드시 해야 하는 과정
     private fun grantExternalStoragePermission():Boolean {
         //마시멜로우 버전 이상이면
         return if (Build.VERSION.SDK_INT >= 23){
@@ -143,5 +156,45 @@ class MainActivity : AppCompatActivity() {
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-    
+    //4. EditText의 배경을 바꾸는 메소드 구현
+    fun SelectBackground(){
+
+        val items = arrayOf<CharSequence>("꽃", "고양이", "게임")
+        val Images = intArrayOf(R.drawable.flower, R.drawable.cat, R.drawable.game)
+
+        //Dialog를 만들어주는 builder를 생성
+        val builder = AlertDialog.Builder(this)
+        //Dialog의 타이틀바 지정
+        builder.setTitle("배경설정")
+            //item의 값을 넣고 리스트로 보여주며 선택 시, 행동을 지정
+            .setItems(items){dialog, index ->
+                //선택된 리스트 번호에 맞는 Images 배열내의 이미지 ID 값을 가져온다.
+                //그리고 setBackgroundResource로 EditText인 et의 배경을 바꾼다.
+                editText1.setBackgroundResource(Images[index])
+
+                //Dialog를 종료한다.
+                dialog.dismiss()
+            }
+
+        //Dialog 생성 및 show <- 보이기
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+
+    //5. EditText의 글자와 배경이미지를 지운다.
+    fun DeleteTextAndImageFile(){
+        //경로명 설정
+        val file_path = Environment.getExternalStorageDirectory().absolutePath + "/campandroid"
+        val dir = File(file_path)
+
+        //경로명 + 파일명
+        File(dir, "test.png")?.apply { delete() }
+
+        //EditText의 문자를 지운다.
+        editText1.setText("")
+    }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 }
