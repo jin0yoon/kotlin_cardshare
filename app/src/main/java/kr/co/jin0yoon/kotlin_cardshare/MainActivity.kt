@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     //타이틀을 숨김
     private fun setHideTitle(){
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        getSupportActionBar()!!.hide()
+        supportActionBar!!.hide()
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
